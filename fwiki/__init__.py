@@ -1,7 +1,8 @@
 import os
 
 from flask import Flask
-
+# To run, navigate to wiki folder and type : export FLASK_APP=fwiki
+# Then type: flask run
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
@@ -28,7 +29,9 @@ def create_app(test_config=None):
     from . import db
     db.init_app(app)
 
-
+    # connects our user authentication (login and registration and tracking
+    from. import auth
+    app.register_blueprint(auth.bp)
 
     # a simple page that says hello
     @app.route('/hello')
