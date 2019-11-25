@@ -24,6 +24,10 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    #Connects our wiki pages
+    from . import wiki
+    app.register_blueprint(wiki.bp)
+    app.add_url_rule('/', endpoint='index')
 
     # connects our database
     from . import db

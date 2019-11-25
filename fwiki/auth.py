@@ -13,9 +13,11 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
-    if request.methd == 'POST':
-        username = request.form['username']
+    if request.method == 'POST':
+        username = request.form['email']
         password = request.form['password']
+        first = request.form['first']
+        last = request.form['last']
         db = get_db()
         error = None
 
@@ -23,14 +25,19 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        #TODO implement check if username is already registered
-        elif False:
-            pass
+        if not first:
+            error = 'First name is required.'
+        elif not last:
+            error = 'Last name is required.'
+        elif db.execute(
+            'SELECT id FROM User WHERE email = ?', (username,)
+        ).fetchone() is not None:
+            error = 'User {} is already registered.'.format(username)
 
         if error is None:
             db.execute(
-                'INSERT INTO user (email, password) VALUES (?, ?)',
-                (username, generate_password_hash(password))
+                'INSERT INTO User (email, password, first, last) VALUES (?, ?, ?, ?)',
+                (username, generate_password_hash(password), first, last)
             )
             db.commit()
             return redirect(url_for('auth.login'))
@@ -40,14 +47,13 @@ def register():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['email']
         password = request.form['password']
         db = get_db()
         error = None
-        # TODO: check if user is in the database
         user = None
-        user = get_db().execute(
-            'SELECT email, password FROM User WHERE email =?', (username,)
+        user = db.execute(
+            'SELECT id, email, password FROM User WHERE email =?', (username,)
         ).fetchone()
 
         if user is None:
@@ -70,12 +76,9 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        # TODO: get user info based on user_id
-        pass
-        # This is example code for connecting to the database
-        # g.user = get_db().execute(
-        #     'SELECT * FROM user WHERE id = ?', (user_id,)
-        # ).fetchone()
+        g.user = get_db().execute(
+            'SELECT * FROM User WHERE id = ?', (user_id,)
+        ).fetchone()
 
 @bp.route('/logout')
 def logout():
