@@ -28,8 +28,12 @@ def register():
             pass
 
         if error is None:
-            #TODO add user credentials into database
-            pass
+            db.execute(
+                'INSERT INTO user (email, password) VALUES (?, ?)',
+                (username, generate_password_hash(password))
+            )
+            db.commit()
+            return redirect(url_for('auth.login'))
         flash(error)
     return render_template('auth/register.html')
 
@@ -43,7 +47,7 @@ def login():
         # TODO: check if user is in the database
         user = None
         user = get_db().execute(
-            'SELECT email FROM User WHERE email =?', (username,)
+            'SELECT email, password FROM User WHERE email =?', (username,)
         ).fetchone()
 
         if user is None:
