@@ -13,7 +13,7 @@ INSERT INTO Book
     ('Lord of the rings: Fellowship of the ring', '1968');
 
 INSERT INTO Author
-    (first, last, birth, death),
+    (first, last, birth, death)
     VALUES
     ('Joanne', 'Rowling','1965-07-31', NULL),
     ('J.R.R', 'Tolkien', '1892-01-03','1973-09-02');
@@ -35,7 +35,7 @@ INSERT INTO Chapter
     (3, 2),
     (4, 1),
     (4, 2),
-    (4, 3),
+    (4, 3);
 
 INSERT INTO WroteBy
     (book, author)
@@ -53,27 +53,27 @@ INSERT INTO ReadTo
     (1, 2, 2),
     (1, 1, 3),
     (1, 1, 4),
-    (1, NULL, 5),
+    (1, NULL, 5);
 
 INSERT INTO Entry
-    (title, lastModified),
+    (title, lastModified)
     VALUES
-    ('Harry Potter', now()),
-    ('Frodo Baggins', now()),
-    ('Voldemort', now()),
-    ('Calvin Golas', now()),
-    ('Harrison Crisman', now()),
-    ('Irvin Choi', now()),
-    ('Gandalf', now()),
-    ('Tony Stark', now()),
-    ('Captain America', now()),
-    ('Saruman', now());
+    ('Harry Potter', CURRENT_TIMESTAMP),
+    ('Frodo Baggins', CURRENT_TIMESTAMP),
+    ('Voldemort', CURRENT_TIMESTAMP),
+    ('Calvin Golas', CURRENT_TIMESTAMP),
+    ('Harrison Crisman', CURRENT_TIMESTAMP),
+    ('Irvin Choi', CURRENT_TIMESTAMP),
+    ('Gandalf', CURRENT_TIMESTAMP),
+    ('Tony Stark', CURRENT_TIMESTAMP),
+    ('Captain America', CURRENT_TIMESTAMP),
+    ('Saruman', CURRENT_TIMESTAMP);
 
 INSERT INTO EntryData
     (entryText, modified, type, entryNumber, chapterNumber, bookId)
     VALUES
-    ('This is the protagonist for harry potter.',now(), 1, 1, 1),
-    ('This is the protagonist for harry potter.',now(), 1, 1, 2),
-    ('This is the protagonist for harry potter.',now(), 1, 1, 3),
-    ('This is the protagonist of Lord of the Rings.',now(), 5, 1, 4),
-    ('This is the protagonist for Lord of the Rings.',now(), 5, 1, 5);
+    ('This is the protagonist for harry potter.',CURRENT_TIMESTAMP,1,1, 1, 1),
+    ('This is the protagonist for harry potter.',CURRENT_TIMESTAMP,2, 1,1, 2),
+    ('This is the protagonist for harry potter.',CURRENT_TIMESTAMP,3, 1, 1, 3),
+    ('This is the protagonist of Lord of the Rings.',CURRENT_TIMESTAMP,4, 5, 1, 4),
+    ('This is the protagonist for Lord of the Rings.',CURRENT_TIMESTAMP,1, 5, 1, 5);
