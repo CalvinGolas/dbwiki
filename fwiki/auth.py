@@ -13,11 +13,11 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
-    if request.methd == 'POST':
-        first_name = request.form['First name: ']
-        last_name = request.form['Last name']
-        username = request.form['username']
+    if request.method == 'POST':
+        username = request.form['email']
         password = request.form['password']
+        first = request.form['first']
+        last = request.form['last']
         db = get_db()
         error = None
 
@@ -25,34 +25,35 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
-        elif not first_name:
-            error = 'First name is required'
-        elif not last_name:
-            error = 'Last name is required'
-        #TODO implement check if username is already registered
-        else:
-            user_name = get_db().execute('SELECT email FROM User WHERE email=?', (username,)).fetchone()
-            if user_name not NONE:
-                error = 'Username already registered.'
+        if not first:
+            error = 'First name is required.'
+        elif not last:
+            error = 'Last name is required.'
+        elif db.execute(
+            'SELECT id FROM User WHERE email = ?', (username,)
+        ).fetchone() is not None:
+            error = 'User {} is already registered.'.format(username)
 
         if error is None:
-            #TODO add user credentials into database
-            db.execute('INSERT INTO User(first,last,email,password) VALUES(?,?,?,?)', (first_name,last_name,email,password))
+            db.execute(
+                'INSERT INTO User (email, password, first, last) VALUES (?, ?, ?, ?)',
+                (username, generate_password_hash(password), first, last)
+            )
             db.commit()
+            return redirect(url_for('auth.login'))
         flash(error)
     return render_template('auth/register.html')
 
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
-        username = request.form['username']
+        username = request.form['email']
         password = request.form['password']
         db = get_db()
         error = None
-        # TODO: check if user is in the database
         user = None
-        user = get_db().execute(
-            'SELECT email FROM User WHERE email = ?', (username,)
+        user = db.execute(
+            'SELECT id, email, password FROM User WHERE email =?', (username,)
         ).fetchone()
 
         if user is None:
@@ -75,10 +76,9 @@ def load_logged_in_user():
     if user_id is None:
         g.user = None
     else:
-        # TODO: get user info based on user_id
-        g.user = db.execute(
-             'SELECT * FROM user WHERE id = ?', (user_id,)
-         ).fetchone()
+        g.user = get_db().execute(
+            'SELECT * FROM User WHERE id = ?', (user_id,)
+        ).fetchone()
 
 @bp.route('/logout')
 def logout():
