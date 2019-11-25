@@ -25,8 +25,9 @@ def register():
             error = 'Password is required.'
         #TODO implement check if username is already registered
         elif False:
-            pass
-
+            user_name = get_db().execute('SELECT email FROM User WHERE email=?', (username,)).fetchone()
+            if user_name not NONE:
+                error = 'Username already registered.'
         if error is None:
             #TODO add user credentials into database
             pass
