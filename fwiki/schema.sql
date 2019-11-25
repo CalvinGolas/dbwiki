@@ -10,7 +10,7 @@ DROP TABLE IF EXISTS ReadTo;
 -- User table:
 CREATE TABLE User (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	frist VARCHAR(50) NOT NULL,
+	first VARCHAR(50) NOT NULL,
 	last VARCHAR(50) NOT NULL,
 	email VARCHAR(150) UNIQUE NOT NULL,
 	password VARCHAR(50) NOT NULL
@@ -42,8 +42,10 @@ CREATE TABLE Author (
 
 -- Chapter table:
 CREATE TABLE Chapter (
-	bookId INTEGER PRIMARY KEY AUTOINCREMENT,
-	chapterNumber INTEGER PRIMARY KEY AUTOINCREMENT
+	bookId INTEGER,
+	chapterNumber INTEGER,
+	PRIMARY KEY (bookId, chapterNumber),
+    FOREIGN KEY (bookId) REFERENCES Book(id)
 );
 
 -- EntryData table:
@@ -51,17 +53,30 @@ CREATE TABLE EntryData (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	entryText TEXT NOT NULL,
 	modified DATE NOT NULL,
-	type ENUM('description','attrubutes','trivia','references') NOT NULL,
+	type INT NOT NULL,
 	entryNumber INT NOT NULL,
 	chapterNumber INT NOT NULL,
 	bookId INT NOT NULL,
+    FOREIGN KEY (type) REFERENCES Types(type),
+	FOREIGN KEY (entryNumber) REFERENCES Entry(id),
+	FOREIGN KEY (chapterNumber, bookId) REFERENCES Chapter(chapterNumber, bookId)
 );
+
+CREATE TABLE Types (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    type VARCHAR(50)
+);
+INSERT INTO Types (type) VALUES
+    ('description'), ('attributes'), ('trivia'), ('references');
+
 
 -- WroteBy table:
 CREATE TABLE WroteBy (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	book INT,
-	author INT NOT NULL
+	author INT NOT NULL,
+    FOREIGN KEY (book) REFERENCES Book(id),
+	FOREIGN KEY (author) REFERENCES Author(id)
 );
 
 -- ReadTo table:
@@ -70,21 +85,8 @@ CREATE TABLE ReadTo (
 	user INT,
 	chapterNumber INT NOT NULL,
 	book INT NOT NULL,
+    FOREIGN KEY (chapterNumber, book) REFERENCES Chapter(chapterNumber, bookId),
+	FOREIGN KEY (user) REFERENCES User(id)
 );
 
--- Adding all the foreign keys now.	
-ALTER TABLE WroteBy 
-	ADD FOREIGN KEY (book) REFERENCES Book(id),
-	ADD FORIEGN KEY (author) REFERENCES Author(id);
-
-ALTER TABLE EntryData
-	ADD FOREIGN KEY (entryNumber) REFERENCES Entry(id),
-	ADD FOREIGN KEY (chapterNumber, bookId) REFERENCES Chapter(chapterNumber, bookId);
-
-ALTER TABLE ReadTo
-	ADD FOREIGN KEY (chapterNumber, book) REFERENCES Chapter(charpterNumber, bookId),
-	ADD FOREIGN KEY (user) REFERENCES User(id);
-
-ALTER TABLE Chapter
-	ADD FOREIGN KEY (bookId) REFERENCES Book(id); 
 
