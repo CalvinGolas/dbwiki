@@ -14,6 +14,8 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.methd == 'POST':
+        first_name = request.form['First name: ']
+        last_name = request.form['Last name']
         username = request.form['username']
         password = request.form['password']
         db = get_db()
@@ -23,6 +25,10 @@ def register():
             error = 'Username is required.'
         elif not password:
             error = 'Password is required.'
+        elif not first_name:
+            error = 'First name is required'
+        elif not last_name:
+            error = 'Last name is required'
         #TODO implement check if username is already registered
         else:
             user_name = get_db().execute('SELECT email FROM User WHERE email=?', (username,)).fetchone()
@@ -31,7 +37,8 @@ def register():
 
         if error is None:
             #TODO add user credentials into database
-            pass
+            db.execute('INSERT INTO User(first,last,email,password) VALUES(?,?,?,?)', (first_name,last_name,email,password))
+            db.commit()
         flash(error)
     return render_template('auth/register.html')
 
@@ -69,11 +76,9 @@ def load_logged_in_user():
         g.user = None
     else:
         # TODO: get user info based on user_id
-        pass
-        # This is example code for connecting to the database
-        # g.user = get_db().execute(
-        #     'SELECT * FROM user WHERE id = ?', (user_id,)
-        # ).fetchone()
+        g.user = db.execute(
+             'SELECT * FROM user WHERE id = ?', (user_id,)
+         ).fetchone()
 
 @bp.route('/logout')
 def logout():
