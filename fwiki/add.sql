@@ -54,3 +54,26 @@ INSERT INTO ReadTo
     (1, 1, 3),
     (1, 1, 4),
     (1, NULL, 5),
+
+INSERT INTO Entry
+    (title, lastModified),
+    VALUES
+    ('Harry Potter', now()),
+    ('Frodo Baggins', now()),
+    ('Voldemort', now()),
+    ('Calvin Golas', now()),
+    ('Harrison Crisman', now()),
+    ('Irvin Choi', now()),
+    ('Gandalf', now()),
+    ('Tony Stark', now()),
+    ('Captain America', now()),
+    ('Saruman', now());
+
+INSERT INTO EntryData
+    (entryText, modified, type, entryNumber, chapterNumber, bookId)
+    VALUES
+    ('This is the protagonist for harry potter.',now(), 1, 1, 1),
+    ('This is the protagonist for harry potter.',now(), 1, 1, 2),
+    ('This is the protagonist for harry potter.',now(), 1, 1, 3),
+    ('This is the protagonist of Lord of the Rings.',now(), 5, 1, 4),
+    ('This is the protagonist for Lord of the Rings.',now(), 5, 1, 5);

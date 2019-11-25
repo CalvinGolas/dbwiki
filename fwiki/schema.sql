@@ -21,7 +21,7 @@ CREATE TABLE Entry (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	title VARCHAR(100) NOT NULL,
 	imageLocation VARCHAR(150),
-	lastModified DATE NOT NULL
+	lastModified DATETIME NOT NULL
 );
 
 -- Book table:
@@ -52,7 +52,7 @@ CREATE TABLE Chapter (
 CREATE TABLE EntryData (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	entryText TEXT NOT NULL,
-	modified DATE NOT NULL,
+	modified DATETIME NOT NULL,
 	type INT NOT NULL,
 	entryNumber INT NOT NULL,
 	chapterNumber INT NOT NULL,
