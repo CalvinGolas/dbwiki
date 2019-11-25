@@ -28,7 +28,7 @@ CREATE TABLE Entry (
 CREATE TABLE Book (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name VARCHAR(150) NOT NULL,
-	published DATE 
+	published YEAR
 );
 
 -- Author table:
