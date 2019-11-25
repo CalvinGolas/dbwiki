@@ -28,7 +28,7 @@ CREATE TABLE Entry (
 CREATE TABLE Book (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	name VARCHAR(150) NOT NULL,
-	published DATE 
+	published YEAR
 );
 
 -- Author table:
@@ -83,7 +83,7 @@ CREATE TABLE WroteBy (
 CREATE TABLE ReadTo (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user INT,
-	chapterNumber INT NOT NULL,
+	chapterNumber INT,
 	book INT NOT NULL,
     FOREIGN KEY (chapterNumber, book) REFERENCES Chapter(chapterNumber, bookId),
 	FOREIGN KEY (user) REFERENCES User(id)
