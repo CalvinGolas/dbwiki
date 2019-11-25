@@ -42,6 +42,9 @@ def login():
         error = None
         # TODO: check if user is in the database
         user = None
+        user = get_db().execute(
+            'SELECT email FROM User WHERE email =?', (username,)
+        ).fetchone()
 
         if user is None:
             error = 'Incorrect username.'
