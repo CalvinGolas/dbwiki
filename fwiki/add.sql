@@ -77,3 +77,10 @@ INSERT INTO EntryData
     ('This is the protagonist for harry potter.',CURRENT_TIMESTAMP,3, 1, 1, 3),
     ('This is the protagonist of Lord of the Rings.',CURRENT_TIMESTAMP,4, 5, 1, 4),
     ('This is the protagonist for Lord of the Rings.',CURRENT_TIMESTAMP,1, 5, 1, 5);
+
+SELECT *
+FROM Entry
+         INNER JOIN EntryData ON Entry.id = EntryData.entryNumber;
+UPDATE EntryData
+SET entryText = 'He dies at the end'
+WHERE id = 2;

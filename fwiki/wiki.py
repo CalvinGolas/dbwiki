@@ -18,6 +18,66 @@ def index():
     ).fetchall()
     return render_template('wiki-pages/index.html', posts=posts)
 
+
+# This method returns the data on our selected entries
+def get_entry(title, check_author=True):
+    entry = get_db().execute(
+        'SELECT * FROM Entry'
+        ' INNER JOIN EntryData ON Entry.id = EntryData.entryNumber'
+        ' WHERE Entry.title = ?',
+        (title,)
+    ).fetchall()
+
+    if entry is None:
+        abort(404, "Entry titled {0} doesn't exist.".format(id))
+
+    # if check_author and entry['author_id'] != g.user['id']:
+    #    abort(403)
+
+    return entry
+
+
+@bp.route('/<string:title>/getEntries', methods=('GET', 'POST'))
+@login_required
+def getEntry(title):
+    entry = get_entry(title)
+    entryInfo = []
+    for e in entry:
+        entryInfo.append(e['entryText'])
+    print(entryInfo)
+    # TODO FIX THE WIKI NOT WORKING WHEN THERE IS NO ENTRYDATA
+    return render_template('wiki-pages/entry.html', entry=entry[0], info=entryInfo)
+
+
+# TODO: This will be where our entries can be updated
+@bp.route('/<int:id>/update', methods=('GET', 'POST'))
+@login_required
+def update(id):
+    entry = get_entry(id)
+
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+        error = None
+
+        if not title:
+            error = 'Title is required.'
+
+        if error is not None:
+            flash(error)
+        # else:
+        #     db = get_db()
+        #     db.execute(
+        #         'UPDATE post SET title = ?, body = ?'
+        #         ' WHERE id = ?',
+        #         (title, body, id)
+        #     )
+        #     db.commit()
+        #     return redirect(url_for('blog.index'))
+
+    return render_template('wiki/update.html', entry=entry)
+
+
 # def get_entry(id, check_author=True):
 #     entry = get_db().execute(
 #         'SELECT *'

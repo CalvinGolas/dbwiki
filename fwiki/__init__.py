@@ -1,6 +1,8 @@
 import os
 
 from flask import Flask
+
+
 # To run, navigate to wiki folder and type : export FLASK_APP=fwiki
 # Then type: flask run
 def create_app(test_config=None):
@@ -24,7 +26,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    #Connects our wiki pages
+    # Connects our wiki pages
     from . import wiki
     app.register_blueprint(wiki.bp)
     app.add_url_rule('/', endpoint='index')
@@ -34,7 +36,7 @@ def create_app(test_config=None):
     db.init_app(app)
 
     # connects our user authentication (login and registration and tracking
-    from. import auth
+    from . import auth
     app.register_blueprint(auth.bp)
 
     # a simple page that says hello
