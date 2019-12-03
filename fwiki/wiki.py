@@ -46,7 +46,7 @@ def getEntry(title):
         entryInfo.append(e['entryText'])
     print(entryInfo)
     # TODO FIX THE WIKI NOT WORKING WHEN THERE IS NO ENTRYDATA
-    row=get_db().execute('SELECT * FROM EntryData').fetchall().rowcount
+    row=get_db().execute('SELECT * FROM EntryData WHERE EntryData.title = ?', (title,)).fetchall().rowcount
     if row == 0:
         abort(404, "There is no entry data.")
 
