@@ -61,7 +61,7 @@ def update(id):
 
     if request.method == 'POST':
         title = request.form['title']
-        body = request.form['body']
+        # body = request.form['body']
         error = None
 
         if not title:
@@ -69,26 +69,26 @@ def update(id):
 
         if error is not None:
             flash(error)
-        # else:
-        #     db = get_db()
-        #     db.execute(
-        #         'UPDATE post SET title = ?, body = ?'
-        #         ' WHERE id = ?',
-        #         (title, body, id)
-        #     )
-        #     db.commit()
-        #     return redirect(url_for('blog.index'))
+        else:
+             db = get_db()
+             db.execute(
+                 'UPDATE Entry SET title = ? WHERE id = ?',
+                 (title, id)
+             )
+             db.commit()
+             # TODO: for calvin, not sure what to return
+             # return redirect(url_for('blog.index'))
 
     return render_template('wiki/update.html', entry=entry)
 
 
-# def get_entry(id, check_author=True):
+#def get_entry(id, check_author=True):
 #     entry = get_db().execute(
 #         'SELECT *'
 #         ' FROM Entry e JOIN User u ON p.author_id = u.id'
 #         ' WHERE p.id = ?',
 #         (id,)
-#     ).fetchone()
+#    ).fetchone()
 #
 #     if post is None:
 #         abort(404, "Entry id {0} doesn't exist.".format(id))
