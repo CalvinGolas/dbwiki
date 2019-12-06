@@ -45,9 +45,14 @@ def getEntry(title):
     for e in entry:
         entryInfo.append(e['entryText'])
     print(entryInfo)
-    # TODO FIX THE WIKI NOT WORKING WHEN THERE IS NO ENTRYDATA
-    row=get_db().execute('SELECT * FROM EntryData WHERE EntryData.title = ?', (title,)).fetchall().rowcount
-    if row == 0:
+
+    entry = get_db().execute(
+        'SELECT * FROM Entry'
+        ' INNER JOIN EntryData ON Entry.id = EntryData.entryNumber'
+        ' WHERE Entry.title = ?',
+        (title,)
+    ).fetchall()
+    if len(entry) == 0:
         abort(404, "There is no entry data.")
 
     return render_template('wiki-pages/entry.html', entry=entry[0], info=entryInfo)
