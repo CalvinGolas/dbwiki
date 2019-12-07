@@ -151,6 +151,7 @@ def changeReadTo():
                 db.execute('UPDATE ReadTo'
                            '    SET chapterNumber=? '
                            '    WHERE book=?', (chapter,book))
+                db.commit()
 
     return render_template('wiki-pages/change.html', entry=bookEntry)
 
