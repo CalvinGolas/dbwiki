@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Add{% endblock %}</h1>
+    {% if g.user %}
+        <a class="action" href="{{ url_for('fwiki.index') }}">Home</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <form method="post">
+            <div>
+                <label>Entry:</label></br>
+                <input type="text" name="entry" id="entry">{{ request.form['chapter'] }}</input></br>
+                <input type="submit" value="Add Entry">
+            </div>
+    </form>
+        {#      <p class="body">{{ entry['title'] }}</p>#}
+{% endblock %}

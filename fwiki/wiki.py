@@ -137,7 +137,7 @@ def changeReadTo():
         num = get_book_id(book)
 
         if chapter is None:
-            error = "You must enter a chapter."
+            error = "Chapter is required."
         else:
             check = db.execute('SELECT ReadTo.book FROM'
                        '    ReadTo INNER JOIN Book ON Book.id = ReadTo.book'
@@ -165,11 +165,10 @@ def get_book_id(title):
 @login_required
 def create():
     if request.method == 'POST':
-        title = request.form['title']
-        body = request.form['body']
+        entry = request.form['entry']
         error = None
 
-        if not title:
+        if not entry:
             error = 'Title is required.'
 
         if error is not None:
@@ -177,14 +176,14 @@ def create():
         else:
             db = get_db()
             db.execute(
-                'INSERT INTO post (title, body, author_id)'
-                ' VALUES (?, ?, ?)',
-                (title, body, g.user['id'])
+                'INSERT INTO Entry (title, lastModified)'
+                ' VALUES (?, ?)',
+                (title, CURRENT_TIMESTAMP)
             )
             db.commit()
             return redirect(url_for('fwiki.index'))
 
-    return render_template('wiki-pages/change.html')
+    return render_template('wiki-pages/newentry.html')
 
 
 @bp.route('/<int:id>/delete', methods=('POST',))
@@ -202,3 +201,8 @@ def deleteEntryData(entryText):
     db.execute('DELETE FROM EntryData WHERE entryText = ?', (entryText,))
     db.commit()
     return redirect(url_for('fwiki.index'))
+
+@bp.route('/addEntry', methods=('GET','POST'))
+@login_required
+def addEntry():
+    return render_template('wiki-pages/newentry.html')
