@@ -134,27 +134,32 @@ def changeReadTo():
         book = request.form.get('book')
         chapter = escape(request.form['chapter'])
         error = None
+        num = get_book_id(book)
 
         if chapter is None:
             error = "You must enter a chapter."
         else:
             check = db.execute('SELECT ReadTo.book FROM'
                        '    ReadTo INNER JOIN Book ON Book.id = ReadTo.book'
-                       '    WHERE Book.title = ?', (book, )).fetchall()
+                       '    WHERE Book.name = ? AND ReadTo.user = ?', (book, g.user['id'])).fetchone()
             if check is None:
                 db.execute('INSERT INTO ReadTo'
-                           '    (book, chapterNumber)'
+                           '    (book, chapterNumber, user)'
                            '    VALUES'
-                           '    (?, ?)', (book, chapter))
+                           '    (?, ?, ?)', (num, chapter, g.user['id']))
                 db.commit()
             else:
                 db.execute('UPDATE ReadTo'
                            '    SET chapterNumber=? '
-                           '    WHERE book=?', (chapter,book))
+                           '    WHERE book=? AND user = ?', (chapter, num, g.user['id']))
                 db.commit()
 
     return render_template('wiki-pages/change.html', entry=bookEntry)
 
+def get_book_id(title):
+    db = get_db()
+    num = db.execute('SELECT id FROM Book WHERE name = ?', (title,)).fetchone()['id']
+    return num
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
@@ -190,7 +195,7 @@ def delete(id):
     db.commit()
     return redirect(url_for('fwiki.index'))
 
-@bp.route('/<string:entryText>/delete', methods=('POST',))
+@bp.route('/<string:entryText>/deleteEntryData', methods=('POST',))
 @login_required
 def deleteEntryData(entryText):
     db = get_db()
