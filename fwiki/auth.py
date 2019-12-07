@@ -2,7 +2,7 @@
 import functools
 
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for, escape
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -14,10 +14,10 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
-        username = request.form['email']
-        password = request.form['password']
-        first = request.form['first']
-        last = request.form['last']
+        username = escape(request.form['email'])
+        password = escape(request.form['password'])
+        first = escape(request.form['first'])
+        last = escape(request.form['last'])
         db = get_db()
         error = None
 
@@ -47,8 +47,8 @@ def register():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     if request.method == 'POST':
-        username = request.form['email']
-        password = request.form['password']
+        username = escape(request.form['email'])
+        password = escape(request.form['password'])
         db = get_db()
         error = None
         user = None
