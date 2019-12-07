@@ -3,7 +3,7 @@
 {% block header %}
     <h1>{% block title %}Topics{% endblock %}</h1>
   {% if g.user %}
-    <a class="action" href="{{ url_for('fwiki.index') }}">New</a>
+    <a class="action" href="{{ url_for('fwiki.addNewEntry') }}">New Entry</a>
   {% endif %}
 {% endblock %}
 
@@ -13,14 +13,10 @@
       <header>
         <div>
           <h1>{{ post['title'] }}</h1>
-          <div class="about">by {{ post['id'] }} on {{ post['lastModified'].strftime('%Y-%m-%d') }}</div>
+          <div class="about">Edited: {{ post['lastModified'].strftime('%Y-%m-%d') }}</div>
             <a class="action" href="{{ url_for('fwiki.getEntry', title=post['title']) }}">View</a>
         </div>
-          {#        {% if g.user['id'] == post['Entry.id'] %}#}
-          {#          <a class="action" href="{{ url_for('fwiki.update', id=post['id']) }}">Edit</a>#}
-          {#        {% endif %}#}
       </header>
-      <p class="body">{{ post['title'] }}</p>
     </article>
     {% if not loop.last %}
       <hr>

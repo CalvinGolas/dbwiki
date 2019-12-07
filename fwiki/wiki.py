@@ -82,23 +82,7 @@ def update(id):
              )
              db.commit()
              # TODO: for calvin, not sure what to return
-             # return redirect(url_for('blog.index'))
+             # return redirect(url_for('wiki.index'))
 
     return render_template('wiki/update.html', entry=entry)
 
-
-#def get_entry(id, check_author=True):
-#     entry = get_db().execute(
-#         'SELECT *'
-#         ' FROM Entry e JOIN User u ON p.author_id = u.id'
-#         ' WHERE p.id = ?',
-#         (id,)
-#    ).fetchone()
-#
-#     if post is None:
-#         abort(404, "Entry id {0} doesn't exist.".format(id))
-#
-#     if check_author and post['author_id'] != g.user['id']:
-#         abort(403)
-#
-#     return post
