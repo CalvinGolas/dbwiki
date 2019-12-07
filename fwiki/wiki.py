@@ -97,11 +97,18 @@ def update(id):
     return render_template('wiki-pages/update.html', entry=entry)
 
 
+def getBook():
+    book = get_db().execute('SELECT name FROM Book').fetchall();
+    bookEntry = []
+    for e in book:
+        bookEntry.append(e['name'])
+    return bookEntry
+
 @bp.route('/changeReadTo', methods=('GET', 'POST'))
 @login_required
 def changeReadTo():
-    book = get_db().execute('SELECT name FROM Book');
-    return render_template('wiki-pages/change.html', entry=book)
+    bookEntry = getBook()
+    return render_template('wiki-pages/change.html', entry=bookEntry)
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
