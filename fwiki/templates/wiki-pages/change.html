@@ -12,14 +12,14 @@
         <header>
             <div>
                 <label>Book:</label></br>
-                <select>
+                <select name="book">
                     {% for eText in entry %}
                         <option>{{ eText }}</option>
                     {% endfor %}
                 </select>
                 </br>
                 <label>Chapter number:</label></br>
-                <input type="text" name="Chapter" id="Chapter">{{ request.form['Chapter'] }}</input></br>
+                <input type="text" name="chapter" id="chapter">{{ request.form['Chapter'] }}</input></br>
                 <button><a class="action" href="{{ url_for('fwiki.changeReadTo', id=entry['id']) }}">Change</a></button>
             </div>
         </header>

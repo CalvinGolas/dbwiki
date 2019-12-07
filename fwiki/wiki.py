@@ -117,7 +117,7 @@ def update(id):
 
 
 def getBook():
-    book = get_db().execute('SELECT name FROM Book').fetchall();
+    book = get_db().execute('SELECT name FROM Book ORDER BY Book.name').fetchall();
     bookEntry = []
     for e in book:
         bookEntry.append(e['name'])
@@ -127,6 +127,30 @@ def getBook():
 @login_required
 def changeReadTo():
     bookEntry = getBook()
+
+    if request.method == 'POST':
+        db = get_db()
+        book = request.form.get('book')
+        chapter = escape(request.form['chapter'])
+        error = None
+
+        if chapter is None:
+            error = "You must enter a chapter."
+        else:
+            check = db.execute('SELECT ReadTo.book FROM'
+                       '    ReadTo INNER JOIN Book ON Book.id = ReadTo.book'
+                       '    WHERE Book.title = ?', (book, )).fetchall()
+            if check is None:
+                db.execute('INSERT INTO ReadTo'
+                           '    (book, chapterNumber)'
+                           '    VALUES'
+                           '    (?, ?)', (book, chapter))
+                db.commit()
+            else:
+                db.execute('UPDATE ReadTo'
+                           '    SET chapterNumber=? '
+                           '    WHERE book=?', (chapter,book))
+
     return render_template('wiki-pages/change.html', entry=bookEntry)
 
 
