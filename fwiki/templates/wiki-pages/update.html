@@ -18,7 +18,7 @@
                         <li>{{ eText }}</li>
                     {% endfor %}
                 </ul>
-                <a class="action" href="{{ url_for('fwiki.update', id=entry['id']) }}">Edit</a>
+                <a class="action" href="{{ url_for('fwiki.edit', id=entry['id']) }}">Edit</a>
             </div>
         </header>
         {#      <p class="body">{{ entry['title'] }}</p>#}
