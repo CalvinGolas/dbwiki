@@ -51,7 +51,6 @@ def login():
         password = escape(request.form['password'])
         db = get_db()
         error = None
-        user = None
         user = db.execute(
             'SELECT id, email, password FROM User WHERE email =?', (username,)
         ).fetchone()

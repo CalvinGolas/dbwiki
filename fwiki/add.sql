@@ -4,13 +4,13 @@ INSERT INTO User
     ('test', 'test2', 'test@gmail.com', 'test');
 
 INSERT INTO Book
-    (name, published)
+    (name)
     VALUES
-    ('Harry Potter and the Philosophers stone', '1997'),
-    ('Harry Potter and the Chamber of Secrets', '1998'),
-    ('Harry Potter and the Prisoner of Azkaban', '1999'),
-    ('Lord of the rings: The Two Towers', '1968'),
-    ('Lord of the rings: Fellowship of the ring', '1968');
+    ('Harry Potter and the Philosophers stone'),
+    ('Harry Potter and the Chamber of Secrets'),
+    ('Harry Potter and the Prisoner of Azkaban'),
+    ('Lord of the rings: The Two Towers'),
+    ('Lord of the rings: Fellowship of the ring');
 
 INSERT INTO Author
     (first, last, birth, death)

@@ -8,6 +8,7 @@ from fwiki.db import get_db
 
 bp = Blueprint('fwiki', __name__)
 
+
 @bp.route('/')
 def index():
     db = get_db()
@@ -75,24 +76,42 @@ def update(id):
         (id,)
     ).fetchone()
     if request.method == 'POST':
-        title = escape(request.form['title'])
-        body = request.form['body']
+        bookTitle = escape(request.form['bookTitle'])
+        entryText = request.form['entryText']
+        chapterNumber = request.form['chapterNumber']
         error = None
 
-        if not title:
+        if not bookTitle:
             error = 'Title is required.'
-
+        elif not entryText:
+            error = 'Entry text is required.'
+        elif not chapterNumber and int(chapterNumber) > 0:
+            error = 'Chapter number requires a valid int input.'
         if error is not None:
             flash(error)
         else:
-             db = get_db()
-             db.execute(
-                 'UPDATE Entry SET title = ? WHERE id = ?',
-                 (title, id)
-             )
-             db.commit()
-             # TODO: for calvin, not sure what to return
-             return redirect(url_for('wiki.index'))
+            db = get_db()
+            # First check if book already exists, if not add it
+            bookId = db.execute(
+                'SELECT id FROM Book WHERE name = ?', (bookTitle,)
+            ).fetchone()
+            if len(bookId) == 0:
+                db.execute(
+                    'INSERT INTO Book (name) VALUES (?)',
+                    (bookTitle,)
+                )
+                db.commit()
+                bookId = db.execute(
+                    'SELECT id FROM Book WHERE name = ?',
+                    (bookTitle,)
+                ).fetchone()['id']
+            db.execute(
+                'INSERT INTO EntryData (entryText, modified, entryNumber, chapterNumber, bookId) '
+                'VALUES (?, CURRENT_TIMESTAMP, ?, ?, ?)',
+                (entryText, id, chapterNumber, bookId)
+            )
+            db.commit()
+            return redirect(url_for('fwiki.index'))
 
     return render_template('wiki-pages/update.html', entry=entry)
 
@@ -101,6 +120,8 @@ def update(id):
 @login_required
 def changeReadTo():
     return render_template('wiki-pages/change.html')
+
+
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
@@ -122,12 +143,23 @@ def create():
                 (title, body, g.user['id'])
             )
             db.commit()
-            return redirect(url_for('wiki.index'))
+            return redirect(url_for('fwiki.index'))
 
     return render_template('wiki-pages/change.html')
+
 
 @bp.route('/<int:id>/delete', methods=('POST',))
 @login_required
 def delete(id):
-    #TODO implement delete
-    return redirect(url_for('/'))
+    db = get_db()
+    db.execute('DELETE FROM Entry WHERE id = ?', (id,))
+    db.commit()
+    return redirect(url_for('fwiki.index'))
+
+@bp.route('/<int:id>/delete', methods=('POST',))
+@login_required
+def deleteEntryData(entryText):
+    db = get_db()
+    db.execute('DELETE FROM EntryData WHERE entryText = ?', (entryText,))
+    db.commit()
+    return redirect(url_for('fwiki.index'))
