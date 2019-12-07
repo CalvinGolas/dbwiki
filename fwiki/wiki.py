@@ -201,8 +201,3 @@ def deleteEntryData(entryText):
     db.execute('DELETE FROM EntryData WHERE entryText = ?', (entryText,))
     db.commit()
     return redirect(url_for('fwiki.index'))
-
-@bp.route('/addEntry', methods=('GET','POST'))
-@login_required
-def addEntry():
-    return render_template('wiki-pages/newentry.html')
