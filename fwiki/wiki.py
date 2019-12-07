@@ -100,7 +100,9 @@ def update(id):
 @bp.route('/changeReadTo', methods=('GET', 'POST'))
 @login_required
 def changeReadTo():
-    return render_template('wiki-pages/change.html')
+    book = get_db().execute('SELECT name FROM Book');
+    return render_template('wiki-pages/change.html', entry=book)
+
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
