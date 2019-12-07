@@ -1,5 +1,5 @@
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, url_for
+    Blueprint, flash, g, redirect, render_template, request, url_for, escape
 )
 from werkzeug.exceptions import abort
 
@@ -65,7 +65,7 @@ def update(id):
     entry = get_entry(id)
 
     if request.method == 'POST':
-        title = request.form['title']
+        title = escape(request.form['title'])
         # body = request.form['body']
         error = None
 
