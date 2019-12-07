@@ -3,7 +3,8 @@
 {% block header %}
     <h1>{% block title %}Topics{% endblock %}</h1>
   {% if g.user %}
-    <a class="action" href="{{ url_for('fwiki.addNewEntry') }}">New Entry</a>
+    <a class="action" href="{{ url_for('fwiki.create') }}">New Entry</a>
+    <a class="action" href="{{ url_for('fwiki.changeReadTo') }}">Change where you've read to!!</a>
   {% endif %}
 {% endblock %}
 

@@ -52,9 +52,13 @@ def getEntry(title):
         ' WHERE Entry.title = ?',
         (title,)
     ).fetchall()
-    if len(entry) == 0:
-        abort(404, "There is no entry data.")
-
+    #if len(entry) == 0:
+    #    abort(404, "There is no entry data.")
+    entry = get_db().execute(
+        'SELECT * FROM Entry'
+        ' WHERE Entry.title = ?',
+        (title,)
+    ).fetchall()
     return render_template('wiki-pages/entry.html', entry=entry[0], info=entryInfo)
 
 
@@ -86,3 +90,33 @@ def update(id):
 
     return render_template('wiki/update.html', entry=entry)
 
+
+@bp.route('/changeReadTo', methods=('GET', 'POST'))
+@login_required
+def changeReadTo():
+    abort(404, "There is no entry data.")
+
+@bp.route('/create', methods=('GET', 'POST'))
+@login_required
+def create():
+    if request.method == 'POST':
+        title = request.form['title']
+        body = request.form['body']
+        error = None
+
+        if not title:
+            error = 'Title is required.'
+
+        if error is not None:
+            flash(error)
+        else:
+            db = get_db()
+            db.execute(
+                'INSERT INTO post (title, body, author_id)'
+                ' VALUES (?, ?, ?)',
+                (title, body, g.user['id'])
+            )
+            db.commit()
+            return redirect(url_for('blog.index'))
+
+    return render_template('blog/create.html')
