@@ -42,18 +42,21 @@ def get_entry(title, check_author=True):
 def getEntry(title):
     entry = get_entry(title)
     entryInfo = []
-    for e in entry:
-        entryInfo.append(e['entryText'])
-    print(entryInfo)
-
-    entry = get_db().execute(
-        'SELECT * FROM Entry'
-        ' INNER JOIN EntryData ON Entry.id = EntryData.entryNumber'
-        ' WHERE Entry.title = ?',
-        (title,)
+    userReadTo = get_db().execute(
+        'SELECT chapterNumber, book '
+        'FROM ReadTo WHERE user = ?',
+        (g.user['id'],)
     ).fetchall()
-    #if len(entry) == 0:
-    #    abort(404, "There is no entry data.")
+    for e in entry:
+        canAddOutside = True
+        for rt in userReadTo:
+            if rt['book'] == e['bookId']:
+                canAddOutside = False
+                if int(rt['chapterNumber']) <= int(e['chapterNumber']):
+                    entryInfo.append(e['entryText'])
+        if canAddOutside:
+            entryInfo.append(e['entryText'])
+    print(entryInfo)
     entry = get_db().execute(
         'SELECT * FROM Entry'
         ' WHERE Entry.title = ?',
