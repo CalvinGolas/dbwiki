@@ -1,26 +1,20 @@
 {% extends 'base.html' %}
 
 {% block header %}
-    <h1>{% block title %}Topics{% endblock %}</h1>
-    {% if g.user %}
-        <a class="action" href="{{ url_for('fwiki.index') }}">Home</a>
-    {% endif %}
+  <h1>{% block title %}Edit "{{ entry['title'] }}"{% endblock %}</h1>
 {% endblock %}
 
 {% block content %}
-    <article class="post">
-        <header>
-            <div>
-                <h1>{{ entry['title'] }}</h1>
-                <div class="about">by {{ entry['id'] }} on {{ entry['lastModified'].strftime('%Y-%m-%d') }}</div>
-                <ul>
-                    {% for eText in info %}
-                        <li>{{ eText }}</li>
-                    {% endfor %}
-                </ul>
-                <a class="action" href="{{ url_for('fwiki.edit', id=entry['id']) }}">Edit</a>
-            </div>
-        </header>
-        {#      <p class="body">{{ entry['title'] }}</p>#}
-    </article>
+  <form method="post">
+    <label for="title">Title</label>
+    <input name="title" id="title"
+      value="{{ request.form['title'] or entry['title'] }}" required>
+    <label for="body">Body</label>
+    <textarea name="body" id="body">{{ request.form['body'] or entry['body'] }}</textarea>
+    <input type="submit" value="Save">
+  </form>
+  <hr>
+  <form action="{{ url_for('fwiki.delete', id=entry['id']) }}" method="post">
+    <input class="danger" type="submit" value="Delete" onclick="return confirm('Are you sure?');">
+  </form>
 {% endblock %}

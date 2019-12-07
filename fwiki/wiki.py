@@ -69,11 +69,14 @@ def getEntry(title):
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
-    entry = get_entry(id)
-
+    entry = get_db().execute(
+        'SELECT * FROM Entry'
+        ' WHERE Entry.id = ?',
+        (id,)
+    ).fetchone()
     if request.method == 'POST':
         title = escape(request.form['title'])
-        # body = request.form['body']
+        body = request.form['body']
         error = None
 
         if not title:
@@ -89,16 +92,15 @@ def update(id):
              )
              db.commit()
              # TODO: for calvin, not sure what to return
-             # return redirect(url_for('wiki.index'))
+             return redirect(url_for('wiki.index'))
 
-    return render_template('wiki/update.html', entry=entry)
+    return render_template('wiki-pages/update.html', entry=entry)
 
 
 @bp.route('/changeReadTo', methods=('GET', 'POST'))
 @login_required
 def changeReadTo():
-    abort(404, "There is no entry data.")
-
+    return render_template('wiki-pages/change.html')
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
 def create():
@@ -120,6 +122,12 @@ def create():
                 (title, body, g.user['id'])
             )
             db.commit()
-            return redirect(url_for('blog.index'))
+            return redirect(url_for('wiki.index'))
 
-    return render_template('blog/create.html')
+    return render_template('wiki-pages/change.html')
+
+@bp.route('/<int:id>/delete', methods=('POST',))
+@login_required
+def delete(id):
+    #TODO implement delete
+    return redirect(url_for('/'))
