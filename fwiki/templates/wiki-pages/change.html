@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block header %}
+    <h1>{% block title %}Change{% endblock %}</h1>
+    {% if g.user %}
+        <a class="action" href="{{ url_for('fwiki.index') }}">Home</a>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+    <article class="post">
+        <header>
+            <div>
+                <h1>{{ entry['title'] }}</h1>
+                <div class="about">by {{ entry['id'] }} on {{ entry['lastModified'].strftime('%Y-%m-%d') }}</div>
+                <select>
+                    {% for eText in info %}
+                        <option value=info>{{ eText }}</option>
+                    {% endfor %}
+                </select>
+                <textarea name="Chapter" id="Chapter">{{ request.form['Chapter'] or post['Chapter'] }}</textarea>
+                <a class="action" href="{{ url_for('fwiki.changeReadTo', id=entry['id']) }}">Edit</a>
+            </div>
+        </header>
+        {#      <p class="body">{{ entry['title'] }}</p>#}
+    </article>
+{% endblock %}
