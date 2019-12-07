@@ -116,7 +116,7 @@ def update(id):
 
     return render_template('wiki-pages/update.html', entry=entry)
 
-
+# This method returns the total books in a array
 def getBook():
     book = get_db().execute('SELECT name FROM Book ORDER BY Book.name').fetchall();
     bookEntry = []
@@ -138,10 +138,13 @@ def changeReadTo():
 
         if chapter is None:
             error = "Chapter is required."
+
+        if error is not None:
+            flash(error)
         else:
             check = db.execute('SELECT ReadTo.book FROM'
                        '    ReadTo INNER JOIN Book ON Book.id = ReadTo.book'
-                       '    WHERE Book.name = ? AND ReadTo.user = ?', (book, g.user['id'])).fetchone()
+                       '    WHERE Book.name = ? AND ReadTo.user = ?', (book, g.user['id'])).fetchone()['title']
             if check is None:
                 db.execute('INSERT INTO ReadTo'
                            '    (book, chapterNumber, user)'
@@ -175,13 +178,17 @@ def create():
             flash(error)
         else:
             db = get_db()
-            db.execute(
-                'INSERT INTO Entry (title, lastModified)'
-                ' VALUES (?, ?)',
-                (title, CURRENT_TIMESTAMP)
-            )
-            db.commit()
-            return redirect(url_for('fwiki.index'))
+            check = db.execute('SELECT title FROM Entry WHERE title=?', (entry,)).fetchone()
+            if check is None:
+                db.execute(
+                    'INSERT INTO Entry (title, lastModified)'
+                    ' VALUES (?, CURRENT_TIMESTAMP)', (entry, )
+                )
+                db.commit()
+                return redirect(url_for('fwiki.index'))
+            else:
+                error = 'The entry with that title already exists.'
+                flash(error)
 
     return render_template('wiki-pages/newentry.html')
 
