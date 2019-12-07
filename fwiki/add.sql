@@ -70,13 +70,13 @@ INSERT INTO Entry
     ('Saruman', CURRENT_TIMESTAMP);
 
 INSERT INTO EntryData
-    (entryText, modified, type, entryNumber, chapterNumber, bookId)
+    (entryText, modified,  entryNumber, chapterNumber, bookId)
     VALUES
-    ('This is the protagonist for harry potter.',CURRENT_TIMESTAMP,1,1, 1, 1),
-    ('This is the protagonist for harry potter.',CURRENT_TIMESTAMP,2, 1,1, 2),
-    ('This is the protagonist for harry potter.',CURRENT_TIMESTAMP,3, 1, 1, 3),
-    ('This is the protagonist of Lord of the Rings.',CURRENT_TIMESTAMP,4, 5, 1, 4),
-    ('This is the protagonist for Lord of the Rings.',CURRENT_TIMESTAMP,1, 5, 1, 5);
+    ('This is the protagonist for harry potter.',CURRENT_TIMESTAMP,1, 1, 1),
+    ('This is the protagonist for harry potter.',CURRENT_TIMESTAMP, 1,1, 2),
+    ('This is the protagonist for harry potter.',CURRENT_TIMESTAMP, 1, 1, 3),
+    ('This is the protagonist of Lord of the Rings.',CURRENT_TIMESTAMP, 5, 1, 4),
+    ('This is the protagonist for Lord of the Rings.',CURRENT_TIMESTAMP, 5, 1, 5);
 
 SELECT *
 FROM Entry

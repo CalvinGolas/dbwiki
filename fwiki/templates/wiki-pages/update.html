@@ -7,14 +7,14 @@
 
 {% block content %}
   <form method="post">
-    <label for="title">Book Title</label>
-    <input name="title" id="title"
+    <label for="bookTitle">Book Title</label>
+    <input name="bookTitle" id="bookTitle"
       value="{{ request.form['bookTitle'] }}" required>
-    <label for="title">Chapter Number</label>
-    <input name="title" id="title"
+    <label for="chapterNumber">Chapter Number</label>
+    <input name="chapterNumber" id="chapterNumber"
       value="{{ request.form['chapterNumber'] }}" required>
-    <label for="body">Body</label>
-    <textarea name="body" id="body">{{ request.form['entryText']}}</textarea>
+    <label for="entryText">Body</label>
+    <textarea name="entryText" id="entryText">{{ request.form['entryText']}}</textarea>
     <input type="submit" value="Save">
   </form>
   <hr>

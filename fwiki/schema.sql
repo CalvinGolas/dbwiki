@@ -53,21 +53,12 @@ CREATE TABLE EntryData (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	entryText TEXT NOT NULL,
 	modified DATETIME NOT NULL,
-	type INT NOT NULL,
 	entryNumber INT NOT NULL,
 	chapterNumber INT NOT NULL,
 	bookId INT NOT NULL,
-    FOREIGN KEY (type) REFERENCES Types(type),
 	FOREIGN KEY (entryNumber) REFERENCES Entry(id),
 	FOREIGN KEY (chapterNumber, bookId) REFERENCES Chapter(chapterNumber, bookId)
 );
-
-CREATE TABLE Types (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    type VARCHAR(50)
-);
-INSERT INTO Types (type) VALUES
-    ('description'), ('attributes'), ('trivia'), ('references');
 
 
 -- WroteBy table:

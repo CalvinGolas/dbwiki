@@ -66,7 +66,7 @@ def getEntry(title):
     return render_template('wiki-pages/entry.html', entry=entry[0], info=entryInfo)
 
 
-# TODO: This will be where our entries can be updated
+# This will be where our entries can be updated
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
 @login_required
 def update(id):
@@ -76,7 +76,8 @@ def update(id):
         (id,)
     ).fetchone()
     if request.method == 'POST':
-        bookTitle = escape(request.form['bookTitle'])
+        print(request.form)
+        bookTitle = request.form['bookTitle']
         entryText = request.form['entryText']
         chapterNumber = request.form['chapterNumber']
         error = None
@@ -94,8 +95,8 @@ def update(id):
             # First check if book already exists, if not add it
             bookId = db.execute(
                 'SELECT id FROM Book WHERE name = ?', (bookTitle,)
-            ).fetchone()
-            if len(bookId) == 0:
+            ).fetchone()['id']
+            if bookId is None:
                 db.execute(
                     'INSERT INTO Book (name) VALUES (?)',
                     (bookTitle,)
@@ -108,7 +109,7 @@ def update(id):
             db.execute(
                 'INSERT INTO EntryData (entryText, modified, entryNumber, chapterNumber, bookId) '
                 'VALUES (?, CURRENT_TIMESTAMP, ?, ?, ?)',
-                (entryText, id, chapterNumber, bookId)
+                (entryText, id, chapterNumber, bookId,)
             )
             db.commit()
             return redirect(url_for('fwiki.index'))
@@ -164,7 +165,7 @@ def delete(id):
     db.commit()
     return redirect(url_for('fwiki.index'))
 
-@bp.route('/<int:id>/delete', methods=('POST',))
+@bp.route('/<string:entryText>/delete', methods=('POST',))
 @login_required
 def deleteEntryData(entryText):
     db = get_db()
