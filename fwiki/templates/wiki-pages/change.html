@@ -12,10 +12,9 @@
         <header>
             <div>
                 <h1>{{ entry['title'] }}</h1>
-                <div class="about">by {{ entry['id'] }} on {{ entry['lastModified'].strftime('%Y-%m-%d') }}</div>
                 <select>
                     {% for eText in info %}
-                        <option value=info>{{ eText }}</option>
+                        <option>{{ eText }}</option>
                     {% endfor %}
                 </select>
                 <textarea name="Chapter" id="Chapter">{{ request.form['Chapter'] or post['Chapter'] }}</textarea>
