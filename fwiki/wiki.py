@@ -126,13 +126,9 @@ def getBook():
 @bp.route('/changeReadTo', methods=('GET', 'POST'))
 @login_required
 def changeReadTo():
-<<<<<<< HEAD
-    return render_template('wiki-pages/change.html')
-
-=======
     bookEntry = getBook()
     return render_template('wiki-pages/change.html', entry=bookEntry)
->>>>>>> 0b3c9ad8bbbea66801a90826d2f2086f7904edd3
+
 
 @bp.route('/create', methods=('GET', 'POST'))
 @login_required
