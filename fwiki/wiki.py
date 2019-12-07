@@ -137,14 +137,12 @@ def changeReadTo():
         num = get_book_id(book)
 
         if chapter is None:
-            error = "Chapter is required."
-
-        if error is not None:
+            error = "You must enter a chapter."
             flash(error)
         else:
             check = db.execute('SELECT ReadTo.book FROM'
-                       '    ReadTo INNER JOIN Book ON Book.id = ReadTo.book'
-                       '    WHERE Book.name = ? AND ReadTo.user = ?', (book, g.user['id'])).fetchone()['title']
+                               '    ReadTo INNER JOIN Book ON Book.id = ReadTo.book'
+                               '    WHERE Book.name = ? AND ReadTo.user = ?', (book, g.user['id'])).fetchone()
             if check is None:
                 db.execute('INSERT INTO ReadTo'
                            '    (book, chapterNumber, user)'
