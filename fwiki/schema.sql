@@ -74,7 +74,7 @@ CREATE TABLE WroteBy (
 CREATE TABLE ReadTo (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
 	user INT,
-	chapterNumber INT,
+	chapterNumber INT DEFAULT 1,
 	book INT NOT NULL,
     FOREIGN KEY (chapterNumber, book) REFERENCES Chapter(chapterNumber, bookId),
 	FOREIGN KEY (user) REFERENCES User(id)
