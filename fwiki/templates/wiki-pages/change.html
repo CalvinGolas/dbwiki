@@ -8,8 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <article class="post">
-        <header>
+    <form method="post">
             <div>
                 <label>Book:</label></br>
                 <select name="book">
@@ -22,7 +21,6 @@
                 <input type="text" name="chapter" id="chapter">{{ request.form['Chapter'] }}</input></br>
                 <button><a class="action" href="{{ url_for('fwiki.changeReadTo', id=entry['id']) }}">Change</a></button>
             </div>
-        </header>
+    </form>
         {#      <p class="body">{{ entry['title'] }}</p>#}
-    </article>
 {% endblock %}
