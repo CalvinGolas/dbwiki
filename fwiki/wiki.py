@@ -136,7 +136,7 @@ def changeReadTo():
         error = None
         num = get_book_id(book)
 
-        if chapter is None:
+        if not chapter:
             error = "You must enter a chapter."
             flash(error)
         else:
