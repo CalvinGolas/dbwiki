@@ -31,22 +31,22 @@ CREATE TABLE Book (
 	name VARCHAR(150) NOT NULL
 );
 
--- Author table:
-CREATE TABLE Author (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	first VARCHAR(50) NOT NULL,
-	last VARCHAR(50) NOT NULL,
-	birth DATE NOT NULL,
-	death DATE
-);
+-- -- Author table:
+-- CREATE TABLE Author (
+-- 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+-- 	first VARCHAR(50) NOT NULL,
+-- 	last VARCHAR(50) NOT NULL,
+-- 	birth DATE NOT NULL,
+-- 	death DATE
+-- );
 
--- Chapter table:
-CREATE TABLE Chapter (
-	bookId INTEGER,
-	chapterNumber INTEGER,
-	PRIMARY KEY (bookId, chapterNumber),
-    FOREIGN KEY (bookId) REFERENCES Book(id)
-);
+-- -- Chapter table:
+-- CREATE TABLE Chapter (
+-- 	bookId INTEGER,
+-- 	chapterNumber INTEGER,
+-- 	PRIMARY KEY (bookId, chapterNumber),
+--     FOREIGN KEY (bookId) REFERENCES Book(id)
+-- );
 
 -- EntryData table:
 CREATE TABLE EntryData (
@@ -61,14 +61,14 @@ CREATE TABLE EntryData (
 );
 
 
--- WroteBy table:
-CREATE TABLE WroteBy (
-	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	book INT,
-	author INT NOT NULL,
-    FOREIGN KEY (book) REFERENCES Book(id),
-	FOREIGN KEY (author) REFERENCES Author(id)
-);
+-- -- WroteBy table:
+-- CREATE TABLE WroteBy (
+-- 	id INTEGER PRIMARY KEY AUTOINCREMENT,
+-- 	book INT,
+-- 	author INT NOT NULL,
+--     FOREIGN KEY (book) REFERENCES Book(id),
+-- 	FOREIGN KEY (author) REFERENCES Author(id)
+-- );
 
 -- ReadTo table:
 CREATE TABLE ReadTo (

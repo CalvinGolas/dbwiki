@@ -53,7 +53,7 @@ def getEntry(title):
         for rt in userReadTo:
             if rt['book'] == e['bookId']:
                 canAddOutside = False
-                if int(rt['chapterNumber']) <= int(e['chapterNumber']):
+                if int(rt['chapterNumber']) >= int(e['chapterNumber']):
                     entryInfo.append(e['entryText'])
         if canAddOutside:
             entryInfo.append(e['entryText'])
@@ -95,7 +95,7 @@ def update(id):
             # First check if book already exists, if not add it
             bookId = db.execute(
                 'SELECT id FROM Book WHERE name = ?', (bookTitle,)
-            ).fetchone()['id']
+            ).fetchone()
             if bookId is None:
                 db.execute(
                     'INSERT INTO Book (name) VALUES (?)',
@@ -106,10 +106,17 @@ def update(id):
                     'SELECT id FROM Book WHERE name = ?',
                     (bookTitle,)
                 ).fetchone()['id']
+            else:
+                bookId = bookId['id']
             db.execute(
                 'INSERT INTO EntryData (entryText, modified, entryNumber, chapterNumber, bookId) '
                 'VALUES (?, CURRENT_TIMESTAMP, ?, ?, ?)',
                 (entryText, id, chapterNumber, bookId,)
+            )
+            # Since we edited the content of an entry, change the lastModified value for it so that it is updated
+            db.execute(
+                'UPDATE Entry SET lastModified  = CURRENT_TIMESTAMP WHERE id = ?',
+                (id,)
             )
             db.commit()
             return redirect(url_for('fwiki.index'))
