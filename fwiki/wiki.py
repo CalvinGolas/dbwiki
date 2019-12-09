@@ -146,6 +146,9 @@ def changeReadTo():
         if not chapter:
             error = "You must enter a chapter."
             flash(error)
+        elif not chapterNumber and int(chapterNumber) > 0:
+            error = 'Chapter number requires a valid int input.'
+            flash(error)
         else:
             check = db.execute('SELECT ReadTo.book FROM'
                                '    ReadTo INNER JOIN Book ON Book.id = ReadTo.book'
