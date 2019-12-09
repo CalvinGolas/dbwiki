@@ -146,7 +146,7 @@ def changeReadTo():
         if not chapter:
             error = "You must enter a chapter."
             flash(error)
-        elif not chapterNumber and int(chapterNumber) > 0:
+        elif not chapter and int(chapter) > 0:
             error = 'Chapter number requires a valid int input.'
             flash(error)
         else:
