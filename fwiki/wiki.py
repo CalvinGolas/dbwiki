@@ -65,6 +65,13 @@ def getEntry(title):
     ).fetchall()
     return render_template('wiki-pages/entry.html', entry=entry[0], info=entryInfo)
 
+def representsInt(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
 
 # This will be where our entries can be updated
 @bp.route('/<int:id>/update', methods=('GET', 'POST'))
@@ -86,7 +93,11 @@ def update(id):
             error = 'Title is required.'
         elif not entryText:
             error = 'Entry text is required.'
-        elif not chapterNumber and int(chapterNumber) > 0:
+        elif not chapterNumber:
+            error = 'Chapter number is required.'
+        elif not representsInt(chapterNumber):
+            error = 'Chapter number requires a valid int input.'
+        elif int(chapterNumber) <= 0:
             error = 'Chapter number requires a valid int input.'
         if error is not None:
             flash(error)
@@ -146,7 +157,10 @@ def changeReadTo():
         if not chapter:
             error = "You must enter a chapter."
             flash(error)
-        elif not chapter and int(chapter) > 0:
+        elif not representsInt(chapter):
+            error = 'Chapter number requires a valid int input.'
+            flash(error)
+        elif int(chapter) <= 0:
             error = 'Chapter number requires a valid int input.'
             flash(error)
         else:
